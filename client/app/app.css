@@ -1,4 +1,3 @@
-
 /**
  * Bootstrap Fonts
  */
@@ -38,8 +37,7 @@
     padding: 0.2em 0;
 }
 
-
-.navbar-brand{
+.navbar-brand {
     margin-top: 10px;
     margin-right: 10px;
     background-image: url(../assets/images/jira-logo-scaled.png);
@@ -47,14 +45,31 @@
     height: 30px;
 }
 
-.navbar-default{
+.navbar-default {
     background-color: #FFFFFF;
 }
 
-.margin-top-20{
+.margin-top-20 {
     margin-top: 20px;
 }
 
-.daily-update .form-control{
+.daily-update .form-control {
     height: 25px;
+}
+
+.tasks, .userStories{
+    -webkit-transition: all linear 0.8s;
+    transition: all linear 0.8s;
+    opacity: 1;
+}
+
+.tasks.ng-hide, .userStories.ng-hide {
+    opacity: 0;
+}
+
+.tasks .taskState {
+    color: #FFFFFF;
+    padding: 3px 6px;
+    border-radius: 4px;
+    margin-top: 3px;
 }

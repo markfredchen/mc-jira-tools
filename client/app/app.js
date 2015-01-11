@@ -4,6 +4,7 @@ angular.module('mcJiraToolsApp', [
     'ngCookies',
     'ngResource',
     'ngSanitize',
+    'ngAnimate',
     'ui.router',
     'ui.bootstrap',
     'ab-base64'

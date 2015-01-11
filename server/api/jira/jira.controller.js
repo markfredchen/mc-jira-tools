@@ -87,12 +87,26 @@ exports.getTeams = function(req, res) {
             {
                 "name": "SC1 Team",
                 "rapidViewID": 43,
-                "members": ["markfred.chen@lanyon.com","zak.liang@lanyon.com"]
+                "members": [
+                    "markfred.chen@lanyon.com",
+                    "zak.liang@lanyon.com",
+                    "tom.wang@lanyon.com",
+                    "lloyd.lin@lanyon.com",
+                    "fiona.wu@lanyon.com",
+                    "yvette.yao@lanyon.com"
+                ]
             },
             {
                 "name": "SC2 Team",
                 "rapidViewID": 44,
-                "members": ["tony.zhang@lanyon.com","daniel.liu@lanyon.com"]
+                "members": [
+                    "tony.zhang@lanyon.com",
+                    "daniel.liu@lanyon.com",
+                    "anthony.zhang@lanyon.com",
+                    "yeast.wu@lanyon.com",
+                    "grace.zhou@lanyon.com",
+                    "karen.yuan@lanyon.com"
+                ]
             }
         ]
     });

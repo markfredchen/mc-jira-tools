@@ -10,8 +10,9 @@ angular.module('mcJiraToolsApp')
             });
     })
     .controller('DailyUpdateCtrl', ['$scope', '$cookieStore', '$http', '$location', function ($scope, $cookieStore, $http, $location) {
+        $scope.today = new Date().getTime();
         $scope.issues = {};
-        $scope.taskTypes = ['Design Discussion', 'Coding', 'Code Review', 'Checklist', 'Test Case', 'Testing', 'Other'];
+        $scope.taskTypes = ['Design Discussion', 'Coding', 'Code Review', 'Checklist', 'Test Case', 'Testing', 'Automation', 'Other'];
 
         $scope.doneTasks = [];
         $scope.todoTasks = [];
@@ -61,6 +62,15 @@ angular.module('mcJiraToolsApp')
             return getIssueTypes(todoTasks).join();
         };
 
+        $scope.toggleStory = function(story) {
+            if(!story.isHide) {
+                story.isHide = true;
+            }else{
+                story.isHide = !story.isHide;
+            }
+
+        };
+
         $scope.getAllTodoTasks = function () {
             var todoTasks = [];
             angular.forEach($scope.issues.userStories, function (story) {
@@ -93,8 +103,29 @@ angular.module('mcJiraToolsApp')
             }
             $http.post('/api/jiras/issues', postData)
                 .success(function (data, status, headers, config) {
-                    console.log(status);
+
                     $scope.issues = JSON.parse(data);
+                    angular.forEach($scope.issues.userStories, function(story) {
+                        angular.forEach(story.tasks, function (task) {
+                            if(task.summary.toLowerCase().indexOf('coding') != -1) {
+                                task.type = 'Coding';
+                            }else if(task.summary.toLowerCase().indexOf('code review') != -1) {
+                                task.type = 'Code Review';
+                            }else if(task.summary.toLowerCase().indexOf('design') != -1 || task.summary.toLowerCase().indexOf('discussion') != -1) {
+                                task.type = 'Design Discussion';
+                            }else if(task.summary.toLowerCase().indexOf('checklist') != -1) {
+                                task.type = 'Checklist';
+                            }else if(task.summary.toLowerCase().indexOf('test case') != -1) {
+                                task.type = 'Test Case';
+                            }else if(task.summary.toLowerCase().indexOf('testing') != -1) {
+                                task.type = 'Testing';
+                            }else if(task.summary.toLowerCase().indexOf('automation') != -1) {
+                                task.type = 'Automation';
+                            }else{
+                                task.type = 'Other';
+                            }
+                        });
+                    });
                 }).error(function (data, status, headers, config) {
                     console.log(data.error);
                     $location.path("/");

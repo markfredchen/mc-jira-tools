@@ -1,9 +1,10 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <div class="container daily-update">
 
-
+    <h3>{{team}} - {{today | date:'MM/dd/yyyy'}}</h3>
     <hr/>
-    <div class="row">
+
+    <div class="row userStories" ng-show="issues.userStories">
         <table class="table table-condensed">
             <thead>
             <tr>
@@ -19,15 +20,16 @@
             </thead>
             <tbody ng-repeat="story in issues.userStories">
             <tr>
-                <td colspan="8"><h5>{{story.userStoryID}} - {{story.summary}}</h5></td>
+                <td><a ng-click="toggleStory(story)"><i class="fa fa-plus-circle" ng-show="story.isHide"></i><i class="fa fa-minus-circle" ng-hide="story.isHide"></i></a></td>
+                <td colspan="7"><h5>{{story.userStoryID}} - {{story.summary}}</h5></td>
             </tr>
-            <tr ng-repeat="task in story.tasks">
+            <tr class="tasks" ng-repeat="task in story.tasks" ng-hide="story.isHide">
                 <td>{{task.taskID}}</td>
                 <td>{{task.summary}}</td>
-                <td>{{task.taskState}}</td>
+                <td><span class="taskState" ng-class="{'To Do': 'label-default', 'In Progress': 'label-primary', 'Done': 'label-success'}[task.taskState]">{{task.taskState}}</span></td>
                 <td>{{task.assignee}}</td>
                 <td>{{task.remaining}}</td>
-                <td><input type="text" class="form-inline form-control" placeholder="To Do" ng-model="task.todo" style="width: 100px"></td>
+                <td><input type="text" class="form-inline form-control" placeholder="To Do" ng-model="task.todo" style="width: 100px" ng-hide="isDoneTask(task)"></td>
                 <td><select class="form-inline form-control" ng-model="task.type" ng-options="type for type in taskTypes" style="width: 150px">
                 </select></td>
                 <td>
@@ -41,9 +43,9 @@
             </tr>
             </tbody>
         </table>
-    </div>
+
     <hr/>
-    <div class="row">
+
         <h4>Done</h4>
         <ul>
             <li ng-repeat="story in issues.userStories" ng-show="hasDoneTask(story)">{{story.userStoryID}}: {{story.summary}} - [{{getDoneTasks(story)}}]</li>
@@ -61,9 +63,7 @@
         <ul>
             <li>N/A</li>
         </ul>
-    </div>
 
-    <div class="row">
         <table class="table table-condensed table-bordered">
             <thead>
             <tr>
