@@ -1,13 +1,16 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <div class="container daily-update">
-
-    <h3>{{team}} - {{today | date:'MM/dd/yyyy'}}</h3>
+    <div class="row">
+    <h3 class="pull-left">{{team}}-Daily Update-{{today | date:'yyyy/MM/dd'}}</h3>
+        <button class="btn btn-success pull-right" ng-click="openReport()">Preview</button>
+    </div>
     <hr/>
 
     <div class="row userStories" ng-show="issues.userStories">
         <table class="table table-condensed">
             <thead>
             <tr>
+                <th></th>
                 <th class="col-sm-1">Key</th>
                 <th class="col-sm-3">Summary</th>
                 <th class="col-sm-1">Status</th>
@@ -20,17 +23,23 @@
             </thead>
             <tbody ng-repeat="story in issues.userStories">
             <tr>
-                <td><a ng-click="toggleStory(story)"><i class="fa fa-plus-circle" ng-show="story.isHide"></i><i class="fa fa-minus-circle" ng-hide="story.isHide"></i></a></td>
-                <td colspan="7"><h5>{{story.userStoryID}} - {{story.summary}}</h5></td>
+                <td><a ng-click="toggleStory(story)" class="story-toggle"><i class="fa fa-plus-circle" ng-show="story.isHide"></i><i
+                    class="fa fa-minus-circle" ng-hide="story.isHide"></i></a></td>
+                <td colspan="8"><h5>{{story.userStoryID}} - {{story.summary}}</h5></td>
             </tr>
             <tr class="tasks" ng-repeat="task in story.tasks" ng-hide="story.isHide">
+                <td></td>
                 <td>{{task.taskID}}</td>
                 <td>{{task.summary}}</td>
-                <td><span class="taskState" ng-class="{'To Do': 'label-default', 'In Progress': 'label-primary', 'Done': 'label-success'}[task.taskState]">{{task.taskState}}</span></td>
+                <td><span class="taskState"
+                          ng-class="{'To Do': 'label-default', 'In Progress': 'label-primary', 'Done': 'label-success'}[task.taskState]">{{task.taskState}}</span>
+                </td>
                 <td>{{task.assignee}}</td>
                 <td>{{task.remaining}}</td>
-                <td><input type="text" class="form-inline form-control" placeholder="To Do" ng-model="task.todo" style="width: 100px" ng-hide="isDoneTask(task)"></td>
-                <td><select class="form-inline form-control" ng-model="task.type" ng-options="type for type in taskTypes" style="width: 150px">
+                <td><input type="text" class="form-inline form-control" placeholder="To Do" ng-model="task.todo"
+                           style="width: 100px" ng-hide="isDoneTask(task)"></td>
+                <td><select class="form-inline form-control" ng-model="task.type"
+                            ng-options="type for type in taskTypes" style="width: 150px">
                 </select></td>
                 <td>
                     <label class="checkbox-inline">
@@ -44,47 +53,62 @@
             </tbody>
         </table>
 
-    <hr/>
+        <hr/>
 
-        <h4>Done</h4>
-        <ul>
-            <li ng-repeat="story in issues.userStories" ng-show="hasDoneTask(story)">{{story.userStoryID}}: {{story.summary}} - [{{getDoneTasks(story)}}]</li>
+        <script type="text/ng-template" id="report.html">
+            <div class="modal-header">
+                <h3 class="modal-title">{{team}}-Daily Update-{{today | date:'yyyy/MM/dd'}}</h3>
+            </div>
+            <div class="modal-body">
+                <h4>Done</h4>
+                <ul>
+                    <li ng-repeat="story in userStories" ng-show="hasDoneTask(story)">{{story.userStoryID}}:
+                        {{story.summary}} - [{{getDoneTasks(story)}}]
+                    </li>
 
-        </ul>
-        <h4>To Do</h4>
-        <ul>
-            <li ng-repeat="story in issues.userStories" ng-show="hasTodoTask(story)">{{story.userStoryID}}: {{story.summary}} - [{{getTodoTasks(story)}}]</li>
-        </ul>
-        <h4>Blocker</h4>
-        <ul>
-            <li>N/A</li>
-        </ul>
-        <h4>Major Issues Resolved/Lessons/Positive</h4>
-        <ul>
-            <li>N/A</li>
-        </ul>
+                </ul>
+                <h4>To Do</h4>
+                <ul>
+                    <li ng-repeat="story in userStories" ng-show="hasTodoTask(story)">{{story.userStoryID}}:
+                        {{story.summary}} - [{{getTodoTasks(story)}}]
+                    </li>
+                </ul>
+                <h4>Blocker</h4>
+                <ul>
+                    <li>N/A</li>
+                </ul>
+                <h4>Major Issues Resolved/Lessons/Positive</h4>
+                <ul>
+                    <li>N/A</li>
+                </ul>
 
-        <table class="table table-condensed table-bordered">
-            <thead>
-            <tr>
-                <th>Key</th>
-                <th>Summary</th>
-                <th>Assignee</th>
-                <th>Remaining</th>
-                <th>To Do</th>
-                <th>Progress</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="task in getAllTodoTasks()">
-                <td>{{task.taskID}}</td>
-                <td>{{task.summary}}</td>
-                <td>{{task.assignee}}</td>
-                <td>{{task.remaining}}</td>
-                <td>{{task.todo}}</td>
-                <td></td>
-            </tr>
-            </tbody>
-        </table>
+                <table class="table table-condensed table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Summary</th>
+                        <th>Assignee</th>
+                        <th>Remaining</th>
+                        <th>To Do</th>
+                        <th>Progress</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="task in getAllTodoTasks()">
+                        <td>{{task.taskID}}</td>
+                        <td>{{task.summary}}</td>
+                        <td>{{task.assignee}}</td>
+                        <td>{{task.remaining}}</td>
+                        <td>{{task.todo}}</td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </script>
+
     </div>
 </div>
