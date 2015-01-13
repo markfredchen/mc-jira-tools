@@ -62,10 +62,13 @@ exports.getAllIssues = function(req, res) {
                         })
                     }
                 });
+
                 res.json(JSON.stringify(rnt));
             }else if(response.statusCode == 401 || response.statusCode == 400){
 
                 res.json({"error":"Access Denied by Jira"});
+            }else{
+                res.json({"error": response.statusCode});
             }
 
             res.end();
@@ -106,6 +109,53 @@ exports.getTeams = function(req, res) {
                     "yeast.wu@lanyon.com",
                     "grace.zhou@lanyon.com",
                     "karen.yuan@lanyon.com"
+                ]
+            },
+            {
+                "name": "SC4 Team",
+                "rapidViewID": 46,
+                "members": [
+                    "apple.yin@lanyon.com",
+                    "gary.liu@lanyon.com",
+                    "tao.wu@lanyon.com",
+                    "ricky.cai@lanyon.com",
+                    "shine.sheng@lanyon.com",
+                    "sabrina.zhu@lanyon.com"
+                ]
+            },
+            {
+                "name": "SC5 Team",
+                "rapidViewID": 47,
+                "members": [
+                    "thomas.yang@lanyon.com",
+                    "lyle.zheng@lanyon.com",
+                    "shawn.guan@lanyon.com",
+                    "bruce.fan@lanyon.com",
+                    "luo.ke@lanyon.com",
+                    "helen.yuan@lanyon.com"
+                ]
+            },
+            {
+                "name": "MKV Team",
+                "rapidViewID": 40,
+                "members": [
+                    "winton.wu@lanyon.com",
+                    "mary.gao@lanyon.com",
+                    "will.wu@lanyon.com",
+                    "andrew.liu@lanyon.com",
+                    "jenny.wu@lanyon.com",
+                ]
+            },
+            {
+                "name": "Reporting Team",
+                "rapidViewID": 39,
+                "members": [
+                    "jacob.zhang@lanyon.com",
+                    "bob.liu@lanyon.com",
+                    "tracy.su@lanyon.com",
+                    "cindy.rui@lanyon.com",
+                    "carter.wu@lanyon.com",
+                    "jay.ruan@lanyon.com"
                 ]
             }
         ]

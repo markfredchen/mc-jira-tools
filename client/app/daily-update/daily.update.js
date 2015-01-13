@@ -87,7 +87,7 @@ angular.module('mcJiraToolsApp')
         $scope.userStories = data.userStories;
         $scope.team = data.team;
         $scope.today = data.today;
-        console.log($scope.userStories);
+        $scope.todoUserStories = [];
         $scope.hasDoneTask = function (story) {
             var hasDoneTask = false;
             angular.forEach(story.tasks, function (task) {
@@ -125,15 +125,26 @@ angular.module('mcJiraToolsApp')
             return getIssueTypes(todoTasks).join();
         };
         $scope.getAllTodoTasks = function () {
-            var todoTasks = [];
-            angular.forEach($scope.userStories, function (story) {
-                angular.forEach(story.tasks, function (task) {
+            if($scope.todoUserStories.length > 0){
+                return;
+            }
+            for( var i = 0; i < $scope.userStories.length; i++) {
+                var story = $scope.userStories[i];
+                var todoUserStory = {
+                    key: story.userStoryID,
+                    summary: story.summary,
+                    tasks: []
+                }
+                for (var j = 0; j < story.tasks.length; j++) {
+                    var task = story.tasks[j];
                     if (task.isTodo) {
-                        todoTasks.push(task);
+                        todoUserStory.tasks.push(task);
                     }
-                });
-            });
-            return todoTasks;
+                }
+                if(todoUserStory.tasks.length > 0) {
+                    $scope.todoUserStories.push(todoUserStory);
+                }
+            }
         }
         var getIssueTypes = function (tasks) {
             var types = [];
@@ -146,4 +157,5 @@ angular.module('mcJiraToolsApp')
             return types;
         }
 
+        $scope.getAllTodoTasks();
     });

@@ -2,7 +2,7 @@
 <div class="container daily-update">
     <div class="row">
     <h3 class="pull-left">{{team}}-Daily Update-{{today | date:'yyyy/MM/dd'}}</h3>
-        <button class="btn btn-success pull-right" ng-click="openReport()">Preview</button>
+        <button class="btn btn-success pull-right generate-report" ng-click="openReport()" ng-disable="issues.userStories">Generate Report</button>
     </div>
     <hr/>
 
@@ -85,7 +85,7 @@
                 <table class="table table-condensed table-bordered">
                     <thead>
                     <tr>
-                        <th>Key</th>
+                        <th colspan="2">Key</th>
                         <th>Summary</th>
                         <th>Assignee</th>
                         <th>Remaining</th>
@@ -93,8 +93,12 @@
                         <th>Progress</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr ng-repeat="task in getAllTodoTasks()">
+                    <tbody ng-repeat="story in todoUserStories">
+                    <tr>
+                        <td colspan="7"><h5>{{story.key}} - {{story.summary}}</h5></td>
+                    </tr>
+                    <tr ng-repeat="task in story.tasks">
+                        <td>&nbsp;</td>
                         <td>{{task.taskID}}</td>
                         <td>{{task.summary}}</td>
                         <td>{{task.assignee}}</td>
