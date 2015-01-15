@@ -17,6 +17,17 @@ angular.module('mcJiraToolsApp')
         $scope.isDoneTask = function (task) {
             return task.taskState == "Done";
         };
+        $scope.getTaskHours = function (task) {
+            var remainHour = parseInt(task.remaining.substring(0, task.remaining.indexOf('h')));
+            console.log(remainHour);
+            var remainHours = [];
+            remainHours.push('');
+            for(var i = 1; i <= remainHour; i++) {
+                remainHours.push(i + 'h');
+            }
+            task.remainingTaskHours = remainHours;
+        }
+
         $scope.toggleStory = function (story) {
             if (!story.isHide) {
                 story.isHide = true;
@@ -37,6 +48,7 @@ angular.module('mcJiraToolsApp')
                     $scope.issues = JSON.parse(data);
                     angular.forEach($scope.issues.userStories, function (story) {
                         angular.forEach(story.tasks, function (task) {
+                            $scope.getTaskHours(task);
                             if (task.summary.toLowerCase().indexOf('coding') != -1) {
                                 task.type = 'Coding';
                             } else if (task.summary.toLowerCase().indexOf('code review') != -1) {

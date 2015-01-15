@@ -36,8 +36,11 @@
                 </td>
                 <td>{{task.assignee}}</td>
                 <td>{{task.remaining}}</td>
-                <td><input type="text" class="form-inline form-control" placeholder="To Do" ng-model="task.todo"
-                           style="width: 100px" ng-hide="isDoneTask(task)"></td>
+                <td>
+                    <select class="form-inline form-control" ng-model="task.todo"
+                            ng-options="hour for hour in task.remainingTaskHours" style="width: 100px" ng-hide="isDoneTask(task)">
+                    </select>
+                </td>
                 <td><select class="form-inline form-control" ng-model="task.type"
                             ng-options="type for type in taskTypes" style="width: 150px">
                 </select></td>

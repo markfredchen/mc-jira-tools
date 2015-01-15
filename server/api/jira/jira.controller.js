@@ -108,7 +108,8 @@ exports.getTeams = function(req, res) {
                     "anthony.zhang@lanyon.com",
                     "yeast.wu@lanyon.com",
                     "grace.zhou@lanyon.com",
-                    "karen.yuan@lanyon.com"
+                    "karen.yuan@lanyon.com",
+                    "kevin.dong@lanyon.com"
                 ]
             },
             {
