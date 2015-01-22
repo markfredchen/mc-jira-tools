@@ -39,7 +39,7 @@ exports.getAllIssues = function(req, res) {
                 var issues = JSON.parse(result.data).issuesData.issues;
                 var rnt = {"userStories": []};
                 issues.forEach(function (issue) {
-                    if (issue.typeName == 'User Story') {
+                    if (issue.typeName == 'User Story' || issue.typeName == 'Bug') {
                         rnt.userStories.push({
                             "userStoryID": issue.key,
                             "summary": issue.summary,
