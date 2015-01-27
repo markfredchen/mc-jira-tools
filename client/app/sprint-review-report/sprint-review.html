@@ -1,0 +1,114 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="container sprint-review">
+    <div class="row">
+        <h3 class="pull-left">{{team}} Sprint Review Data Report</h3>
+    </div>
+    <hr/>
+    <div class="row" ng-show="issues.userStories">
+        <form role="form" class="col-sm-12 form-inline">
+            <div class="form-group">
+                <label for="teamSize">Team Size</label>
+                <input type="number" ng-model="teamSize" class="form-control" id="teamSize" required>
+            </div>
+            <div class="form-group">
+                <label for="sprintDuration">Sprint Duration</label>
+                <input type="number" ng-model="sprintDuration" class="form-control" id="sprintDuration" required>
+            </div>
+            <div class="form-group">
+                <label for="ptos">Actual PTOs</label>
+                <input type="number" ng-model="ptos" class="form-control" id="ptos" required>
+            </div>
+        </form>
+        <table class="table table-condensed">
+            <thead>
+            <tr>
+                <th class="col-sm-1">Key</th>
+                <th class="col-sm-3">Summary</th>
+                <th class="col-sm-1">Status</th>
+                <th class="col-sm-1">Points</th>
+                <th class="col-sm-1">Finished Hours</th>
+                <th class="col-sm-1">Remaining Hours</th>
+                <th class="col-sm-1">Count of Defects</th>
+                <th class="col-sm-3">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="story in issues.userStories">
+                <td>{{story.userStoryID}}</td>
+                <td>{{story.summary}}</td>
+                <td>{{story.status}}</td>
+                <td>{{story.points}}</td>
+                <td>{{story.hoursSpent}}</td>
+                <td>{{story.hoursRemain}}</td>
+                <td>{{story.countOfDefects}}</td>
+                <td>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="isNewDev" ng-model="story.isNewDev"> Is New Dev
+                    </label>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="isNonRoadmap" ng-model="story.isNonRoadMap"> Is Non Roadmap
+                    </label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <hr/>
+    </div>
+
+</div>
+<div class="container-fluid" style="margin-bottom: 100px">
+    <table class="table table-condensed table-bordered row" ng-show="issues.userStories">
+        <thead>
+        <tr>
+            <th>Velocity</th>
+            <th>Team Size</th>
+            <th>Sprint Duration</th>
+            <th>Story Points Planned</th>
+            <th>Story Points Accepted</th>
+            <th>Count of Accepted Stories</th>
+            <th>Predictability Index</th>
+            <th>Average Velocity</th>
+            <th>Planned Story Points per Day per Person </th>
+            <th>Finished Story Points per Day per Person</th>
+            <th>First Time Right</th>
+            <th>First Time Right</th>
+            <th>Count of zero defect story</th>
+            <th>Count of in-sprint Defects</th>
+            <th>Count of in-sprint defects per SP</th>
+            <th>Capacity</th>
+            <th>Total Hours</th>
+            <th>New Development Effort</th>
+            <th>New Development Rate</th>
+            <th>Non-roadmap Effort</th>
+            <th>Non-roadmap Rate</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th></th>
+            <th>{{teamSize}}</th>
+            <th>{{sprintDuration}}</th>
+            <th>{{plannedSPs()}}</th>
+            <th>{{acceptedSPs()}}</th>
+            <th>{{countOfAcceptedUS()}}</th>
+            <th>{{acceptedSPs() / plannedSPs() * 100 | number: 2 }} %</th>
+            <th></th>
+            <th>{{plannedSPs() / (teamSize * sprintDuration - ptos) | number: 2 }}</th>
+            <th>{{acceptedSPs() / (teamSize * sprintDuration - ptos) | number: 2 }}</th>
+            <th></th>
+            <th>{{countOfZeroDefectUS() / countOfAcceptedUS() * 100 | number: 2}} %</th>
+            <th>{{countOfZeroDefectUS()}}</th>
+            <th>{{countOfInSprintDefects()}}</th>
+            <th>{{countOfInSprintDefects() / acceptedSPs() * 100 | number: 2}}%</th>
+            <th></th>
+            <th>{{totalHours()}}</th>
+            <th>{{newDevHours()}}</th>
+            <th>{{newDevHours()/totalHours() * 100 | number: 2}}%</th>
+            <th>{{nonRoadmapHours()}}</th>
+            <th>{{nonRoadmapHours()/totalHours()*100 | number: 2}}%</th>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</div>

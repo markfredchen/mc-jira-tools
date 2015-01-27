@@ -84,6 +84,119 @@ exports.getAllIssues = function(req, res) {
 
 };
 
+exports.getSprintReviewData = function (req, res) {
+    var credential = req.body.auth;
+    var rapidViewID = req.body.rapidViewID;
+    var options = {
+        hostname: 'passkey.atlassian.net',
+        port: 443,
+        path: '/rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=' + rapidViewID,
+        method: 'GET',
+        headers: {
+            'Authorization': 'Basic '+ credential
+        }
+    };
+    var request = https.request(options, function (response) {
+        var result = {};
+        result.STATUS = response.statusCode;
+        result.HEADERS = JSON.stringify(response.headers);
+        result.data = '';
+        response.on('data', function (chunk) {
+            result.data += chunk;
+        });
+        response.on('end', function () {
+            if(response.statusCode == 200) {
+                console.log('get sprint sccusess');
+                var issues = JSON.parse(result.data).issuesData.issues;
+                var userStoryIDs = [];
+                var rnt = {"userStories": []};
+                issues.forEach(function (issue) {
+                    if (issue.typeName == 'User Story' || issue.typeName == 'Bug') {
+                        userStoryIDs.push(issue.key);
+                        rnt.userStories.push({
+                            "userStoryID": issue.key,
+                            "summary": issue.summary,
+                            "status": issue.statusName,
+                            "countOfDefects": 0,
+                            "isNewDev": true,
+                            "isNonRoadMap": false
+                        });
+                    } else {
+                        rnt.userStories.forEach(function (story) {
+                            if (story.userStoryID == issue.parentKey) {
+                                if (issue.typeName === 'Bug') {
+                                    story.countOfDefects++;
+                                }
+                            }
+                        })
+                    }
+                });
+
+                var detailOption = {
+                    hostname: 'passkey.atlassian.net',
+                    port: 443,
+                    path: '/rest/api/2/search?jql=Key%20in%20(' + userStoryIDs.join(",") + ')&fields=id,key,aggregatetimespent,aggregatetimeestimate,customfield_10003',
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Basic ' + credential
+                    }
+                };
+                var detailRequest = https.request(detailOption, function (detailRes) {
+                    var r = {};
+                    r.STATUS = detailRes.statusCode;
+                    r.HEADERS = JSON.stringify(detailRes.headers);
+                    r.data = '';
+                    detailRes.on('data', function (chunk) {
+                        r.data += chunk;
+                    });
+                    detailRes.on('end', function () {
+                        console.log('get issue detail sccusess');
+                        res.statusCode = detailRes.statusCode;
+                        if(detailRes.statusCode === 200) {
+                            var issues = JSON.parse(r.data).issues;
+                            issues.forEach(function (issue) {
+                                rnt.userStories.forEach(function (story) {
+                                    if(story.userStoryID === issue.key) {
+                                        story.hoursSpent = issue.fields.aggregatetimespent / 3600;
+                                        story.hoursRemain = issue.fields.aggregatetimeestimate / 3600;
+                                        story.points = issue.fields.customfield_10003;
+                                    }
+                                });
+                            });
+                            res.json(JSON.stringify(rnt));
+                        } else if (detailRes.statusCode == 401 || detailRes.statusCode == 400) {
+                            res.json({"error": "Access Denied by Jira"});
+                        } else {
+                            res.json({"error": detailRes.statusCode});
+                        }
+                        res.end();
+                    });
+                });
+                detailRequest.on('error', function (e) {
+                    console.log('problem with request: ' + e.message);
+                });
+
+                // write data to request body
+                detailRequest.end();
+            }else if(response.statusCode == 401 || response.statusCode == 400){
+
+                res.json({"error":"Access Denied by Jira"});
+                res.end();
+            }else{
+                res.json({"error": response.statusCode});
+                res.end();
+            }
+        });
+    });
+
+    request.on('error', function (e) {
+        console.log('problem with request: ' + e.message);
+    });
+
+    // write data to request body
+    request.end();
+};
+
 exports.getTeams = function(req, res) {
     res.json({
         "teams":[

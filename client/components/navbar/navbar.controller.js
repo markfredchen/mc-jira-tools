@@ -8,6 +8,9 @@ angular.module('mcJiraToolsApp')
     }, {
         'title': 'Daily Update',
         'link': '/daily-update'
+    }, {
+        'title': 'Sprint Review',
+        'link': '/sprint-review'
     }];
 
     $scope.isCollapsed = true;
