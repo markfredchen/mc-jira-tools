@@ -35,11 +35,11 @@ exports.getAllIssues = function(req, res) {
         });
         response.on('end', function () {
             res.statusCode = response.statusCode;
-            if(response.statusCode == 200) {
+            if(response.statusCode === 200) {
                 var issues = JSON.parse(result.data).issuesData.issues;
                 var rnt = {"userStories": []};
                 issues.forEach(function (issue) {
-                    if (issue.typeName == 'User Story' || issue.typeName == 'Bug') {
+                    if (issue.typeName === 'User Story' || issue.typeName === 'Bug') {
                         rnt.userStories.push({
                             "userStoryID": issue.key,
                             "summary": issue.summary,
@@ -56,7 +56,7 @@ exports.getAllIssues = function(req, res) {
                             "type": ""
                         };
                         rnt.userStories.forEach(function (story) {
-                            if (story.userStoryID == issue.parentKey) {
+                            if (story.userStoryID === issue.parentKey) {
                                 story.tasks.push(task);
                             }
                         })
@@ -64,7 +64,7 @@ exports.getAllIssues = function(req, res) {
                 });
 
                 res.json(JSON.stringify(rnt));
-            }else if(response.statusCode == 401 || response.statusCode == 400){
+            }else if(response.statusCode === 401 || response.statusCode === 400){
 
                 res.json({"error":"Access Denied by Jira"});
             }else{
@@ -105,13 +105,13 @@ exports.getSprintReviewData = function (req, res) {
             result.data += chunk;
         });
         response.on('end', function () {
-            if(response.statusCode == 200) {
+            if(response.statusCode === 200) {
                 console.log('get sprint sccusess');
                 var issues = JSON.parse(result.data).issuesData.issues;
                 var userStoryIDs = [];
                 var rnt = {"userStories": []};
                 issues.forEach(function (issue) {
-                    if (issue.typeName == 'User Story' || issue.typeName == 'Bug') {
+                    if (issue.typeName === 'User Story' || issue.typeName === 'Bug') {
                         userStoryIDs.push(issue.key);
                         rnt.userStories.push({
                             "userStoryID": issue.key,
@@ -123,7 +123,7 @@ exports.getSprintReviewData = function (req, res) {
                         });
                     } else {
                         rnt.userStories.forEach(function (story) {
-                            if (story.userStoryID == issue.parentKey) {
+                            if (story.userStoryID === issue.parentKey) {
                                 if (issue.typeName === 'Bug') {
                                     story.countOfDefects++;
                                 }
@@ -164,7 +164,7 @@ exports.getSprintReviewData = function (req, res) {
                                 });
                             });
                             res.json(JSON.stringify(rnt));
-                        } else if (detailRes.statusCode == 401 || detailRes.statusCode == 400) {
+                        } else if (detailRes.statusCode === 401 || detailRes.statusCode === 400) {
                             res.json({"error": "Access Denied by Jira"});
                         } else {
                             res.json({"error": detailRes.statusCode});
@@ -178,7 +178,7 @@ exports.getSprintReviewData = function (req, res) {
 
                 // write data to request body
                 detailRequest.end();
-            }else if(response.statusCode == 401 || response.statusCode == 400){
+            }else if(response.statusCode === 401 || response.statusCode === 400){
 
                 res.json({"error":"Access Denied by Jira"});
                 res.end();
