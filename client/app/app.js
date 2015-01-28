@@ -16,9 +16,9 @@ angular.module('mcJiraToolsApp', [
         $locationProvider.html5Mode(true);
     })
     .run(function($rootScope, $cookieStore, $location){
-        $rootScope.$on("$stateChangeStart", function(event, next, current){
-            if(!$cookieStore.get('auth') && next.templateUrl != 'app/main/main.html'){
-                $location.path("/");
+        $rootScope.$on('$stateChangeStart', function(event, next){
+            if(!$cookieStore.get('auth') && next.templateUrl !== 'app/main/main.html'){
+                $location.path('/');
             }
         });
     });

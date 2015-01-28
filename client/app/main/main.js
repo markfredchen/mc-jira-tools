@@ -14,9 +14,9 @@ angular.module('mcJiraToolsApp')
             $http.get('/api/jiras/teams').success(function(data){
                 $scope.teams = data.teams;
             });
-        }
+        };
         $scope.saveCookie = function () {
-            $cookieStore.put('auth', base64.encode($scope.username + ":" + $scope.password));
+            $cookieStore.put('auth', base64.encode($scope.username + ':' + $scope.password));
             $cookieStore.put('username', $scope.username);
             $scope.team = {};
             angular.forEach($scope.teams, function(value){
@@ -25,14 +25,14 @@ angular.module('mcJiraToolsApp')
                 console.log(value);
                 console.log(members);
                 for(var i = 0; i<members.length; i++) {
-                    if(members[i] == $scope.username){
+                    if(members[i] === $scope.username){
                         $scope.team = value;
                     }
                 }
-            })
+            });
             $cookieStore.put('team', $scope.team.name);
             $cookieStore.put('rapidViewID', $scope.team.rapidViewID);
-            $location.path("/daily-update");
-        }
+            $location.path('/daily-update');
+        };
         $scope.getTeams();
     }]);

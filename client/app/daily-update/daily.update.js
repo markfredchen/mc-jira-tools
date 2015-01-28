@@ -15,7 +15,7 @@ angular.module('mcJiraToolsApp')
         $scope.taskTypes = ['Design Discussion', 'Coding', 'Code Review', 'Checklist', 'Test Case', 'Testing', 'Automation', 'Other'];
 
         $scope.isDoneTask = function (task) {
-            return task.taskState == "Done";
+            return task.taskState === 'Done';
         };
         $scope.toggleStory = function (story) {
             if (!story.isHide) {
@@ -30,38 +30,38 @@ angular.module('mcJiraToolsApp')
             var postData = {
                 auth: $cookieStore.get('auth'),
                 rapidViewID: $cookieStore.get('rapidViewID')
-            }
+            };
             $http.post('/api/jiras/issues', postData)
-                .success(function (data, status, headers, config) {
+                .success(function (data) {
 
                     $scope.issues = JSON.parse(data);
                     angular.forEach($scope.issues.userStories, function (story) {
                         angular.forEach(story.tasks, function (task) {
-                            if (task.summary.toLowerCase().indexOf('coding') != -1) {
+                            if (task.summary.toLowerCase().indexOf('coding') !== -1) {
                                 task.type = 'Coding';
-                            } else if (task.summary.toLowerCase().indexOf('code review') != -1) {
+                            } else if (task.summary.toLowerCase().indexOf('code review') !== -1) {
                                 task.type = 'Code Review';
-                            } else if (task.summary.toLowerCase().indexOf('design') != -1 || task.summary.toLowerCase().indexOf('discussion') != -1) {
+                            } else if (task.summary.toLowerCase().indexOf('design') !== -1 || task.summary.toLowerCase().indexOf('discussion') !== -1) {
                                 task.type = 'Design Discussion';
-                            } else if (task.summary.toLowerCase().indexOf('checklist') != -1) {
+                            } else if (task.summary.toLowerCase().indexOf('checklist') !== -1) {
                                 task.type = 'Checklist';
-                            } else if (task.summary.toLowerCase().indexOf('test case') != -1) {
+                            } else if (task.summary.toLowerCase().indexOf('test case') !== -1) {
                                 task.type = 'Test Case';
-                            } else if (task.summary.toLowerCase().indexOf('testing') != -1) {
+                            } else if (task.summary.toLowerCase().indexOf('testing') !== -1) {
                                 task.type = 'Testing';
-                            } else if (task.summary.toLowerCase().indexOf('automation') != -1) {
+                            } else if (task.summary.toLowerCase().indexOf('automation') !== -1) {
                                 task.type = 'Automation';
                             } else {
                                 task.type = 'Other';
                             }
                         });
                     });
-                }).error(function (data, status, headers, config) {
+                }).error(function (data) {
                     console.log(data.error);
-                    $location.path("/");
+                    $location.path('/');
                 });
 
-        }
+        };
         $scope.openReport = function () {
 
             $modal.open({
@@ -71,14 +71,14 @@ angular.module('mcJiraToolsApp')
                 resolve: {
                     data: function () {
                         return {
-                            "userStories": $scope.issues.userStories,
-                            "team": $scope.team,
-                            "today": $scope.today
-                        }
+                            'userStories': $scope.issues.userStories,
+                            'team': $scope.team,
+                            'today': $scope.today
+                        };
                     }
                 }
             });
-        }
+        };
 
         $scope.initData();
 
@@ -134,7 +134,7 @@ angular.module('mcJiraToolsApp')
                     key: story.userStoryID,
                     summary: story.summary,
                     tasks: []
-                }
+                };
                 for (var j = 0; j < story.tasks.length; j++) {
                     var task = story.tasks[j];
                     if (task.isTodo) {
@@ -145,17 +145,17 @@ angular.module('mcJiraToolsApp')
                     $scope.todoUserStories.push(todoUserStory);
                 }
             }
-        }
+        };
         var getIssueTypes = function (tasks) {
             var types = [];
 
             angular.forEach(tasks, function (task) {
-                if (types.indexOf(task.type) == -1 && task.type != '') {
+                if (types.indexOf(task.type) === -1 && task.type !== '') {
                     types.push(task.type);
                 }
             });
             return types;
-        }
+        };
 
         $scope.getAllTodoTasks();
     });

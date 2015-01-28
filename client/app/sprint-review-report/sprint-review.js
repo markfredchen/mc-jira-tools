@@ -9,19 +9,19 @@ angular.module('mcJiraToolsApp')
                 controller: 'SprintReviewCtrl'
             });
     })
-    .controller('SprintReviewCtrl', ['$scope', '$cookieStore', '$http', '$location', '$modal', function ($scope, $cookieStore, $http, $location, $modal) {
+    .controller('SprintReviewCtrl', ['$scope', '$cookieStore', '$http', function ($scope, $cookieStore, $http) {
         $scope.initData = function () {
             $scope.team = $cookieStore.get('team');
             var postData = {
                 auth: $cookieStore.get('auth'),
                 rapidViewID: $cookieStore.get('rapidViewID')
-            }
+            };
             $http.post('/api/jiras/sprintReview', postData)
-                .success(function (data, status, headers, config) {
+                .success(function (data) {
                     $scope.issues = JSON.parse(data);
 
                 });
-        }
+        };
         $scope.initData();
 
         $scope.plannedSPs = function(){
@@ -31,16 +31,17 @@ angular.module('mcJiraToolsApp')
             });
 
             return plannedSPs;
-        }
+        };
         $scope.acceptedSPs = function(){
             var acceptedSPs = 0;
             angular.forEach($scope.issues.userStories, function (story) {
-                if(story.status === 'Done')
+                if(story.status === 'Done') {
                     acceptedSPs += story.points;
+                }
             });
 
             return acceptedSPs;
-        }
+        };
         $scope.countOfAcceptedUS = function(){
             var count = 0;
             angular.forEach($scope.issues.userStories, function (story) {
@@ -50,7 +51,7 @@ angular.module('mcJiraToolsApp')
             });
 
             return count;
-        }
+        };
         $scope.countOfZeroDefectUS = function(){
             var count = 0;
             angular.forEach($scope.issues.userStories, function (story) {
@@ -59,7 +60,7 @@ angular.module('mcJiraToolsApp')
                 }
             });
             return count;
-        }
+        };
 
         $scope.countOfInSprintDefects = function(){
             var count = 0;
@@ -69,14 +70,14 @@ angular.module('mcJiraToolsApp')
                 }
             });
             return count;
-        }
+        };
         $scope.totalHours = function(){
             var totalHours = 0;
             angular.forEach($scope.issues.userStories, function (story) {
                 totalHours += story.hoursSpent;
             });
             return totalHours;
-        }
+        };
         $scope.newDevHours = function(){
             var totalHours = 0;
             angular.forEach($scope.issues.userStories, function (story) {
@@ -85,7 +86,7 @@ angular.module('mcJiraToolsApp')
                 }
             });
             return totalHours;
-        }
+        };
         $scope.nonRoadmapHours = function () {
             var totalHours = 0;
             angular.forEach($scope.issues.userStories, function (story) {
@@ -94,5 +95,5 @@ angular.module('mcJiraToolsApp')
                 }
             });
             return totalHours;
-        }
+        };
     }]);
