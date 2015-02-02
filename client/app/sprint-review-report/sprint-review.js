@@ -30,6 +30,38 @@ angular.module('mcJiraToolsApp')
 
         $scope.storyStatuses = ['Done', 'In Progress', 'Active', 'Approved'];
 
+        $scope.getCompletedUserStoryKeys = function(){
+            var userStoryKeys = [];
+            angular.forEach($scope.issues.userStories, function (story) {
+              if(story.status === 'Done'){
+                  userStoryKeys.push(story.userStoryID);
+              }
+
+            });
+            return userStoryKeys.join(',');
+        };
+        $scope.getInCompletedUserStoryKeys = function(){
+            var userStoryKeys = [];
+            angular.forEach($scope.issues.userStories, function (story) {
+                if(story.status !== 'Done'){
+                    userStoryKeys.push(story.userStoryID);
+                }
+
+            });
+            return userStoryKeys.join(',');
+        };
+
+        $scope.getDefectUserStories = function(){
+            var stories = [];
+            angular.forEach($scope.issues.userStories, function (story) {
+                if(story.countOfDefects > 0 && story.status === 'Done'){
+                    stories.push(story);
+                }
+
+            });
+            return stories;
+        }
+
         $scope.plannedSPs = function(){
             var plannedSPs = 0;
             angular.forEach($scope.issues.userStories, function (story) {

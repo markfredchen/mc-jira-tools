@@ -117,9 +117,9 @@
         </tbody>
     </table>
     <hr/>
-    <div class="row">
+    <div class="row" ng-show="issues.userStories">
         <div class="col-sm-6">
-            <table class="table table-condensed table-bordered col-sm-6" ng-show="issues.userStories">
+            <table class="table table-condensed table-bordered col-sm-6">
                 <tbody>
                 <tr>
                     <th>Team Size
@@ -143,9 +143,33 @@
                 </tr>
                 </tbody>
             </table>
+            <h2>Completed User Story jQL</h2>
+            <p>Key in ({{getCompletedUserStoryKeys()}})</p>
+            <h2>In-Completed User Story jQL</h2>
+            <p>Key in ({{getInCompletedUserStoryKeys()}})</p>
+            <table class="table table-condensed table-bordered col-sm-6">
+                <thead>
+                    <tr>
+                        <th>US ID</th>
+                        <th>US Name</th>
+                        <th>Estimation</th>
+                        <th>Number Of Defects</th>
+                        <th>Defects</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="story in getDefectUserStories()">
+                        <td>{{story.userStoryID}}</td>
+                        <td>{{story.summary}}</td>
+                        <td>{{story.points}}</td>
+                        <td>{{story.countOfDefects}}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="col-sm-6">
-            <table class="table table-condensed table-bordered col-sm-6" ng-show="issues.userStories">
+            <table class="table table-condensed table-bordered col-sm-6">
                 <tbody>
                 <tr>
                     <th>Velocity</th>
