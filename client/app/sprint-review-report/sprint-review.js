@@ -24,6 +24,12 @@ angular.module('mcJiraToolsApp')
         };
         $scope.initData();
 
+        $scope.isDone = function (story) {
+            return story.status === 'Done';
+        };
+
+        $scope.storyStatuses = ['Done', 'In Progress', 'Active', 'Approved'];
+
         $scope.plannedSPs = function(){
             var plannedSPs = 0;
             angular.forEach($scope.issues.userStories, function (story) {

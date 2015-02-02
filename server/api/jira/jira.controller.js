@@ -124,7 +124,7 @@ exports.getSprintReviewData = function (req, res) {
                     } else {
                         rnt.userStories.forEach(function (story) {
                             if (story.userStoryID === issue.parentKey) {
-                                if (issue.typeName === 'Bug') {
+                                if (issue.typeName === 'Story Bug') {
                                     story.countOfDefects++;
                                 }
                             }

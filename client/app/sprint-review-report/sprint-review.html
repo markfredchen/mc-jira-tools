@@ -36,7 +36,13 @@
             <tr ng-repeat="story in issues.userStories">
                 <td>{{story.userStoryID}}</td>
                 <td>{{story.summary}}</td>
-                <td>{{story.status}}</td>
+                <td><span ng-show="isDone(story)">{{story.status}}</span>
+                    <span ng-hide="isDone(story)">
+                        <select class="form-inline form-control" ng-model="story.status"
+                                ng-options="status for status in storyStatuses" style="width: 150px">
+                        </select>
+                    </span>
+                </td>
                 <td>{{story.points}}</td>
                 <td>{{story.hoursSpent}}</td>
                 <td>{{story.hoursRemain}}</td>
@@ -86,29 +92,147 @@
         </thead>
         <tbody>
         <tr>
-            <th></th>
-            <th>{{teamSize}}</th>
-            <th>{{sprintDuration}}</th>
-            <th>{{plannedSPs()}}</th>
-            <th>{{acceptedSPs()}}</th>
-            <th>{{countOfAcceptedUS()}}</th>
-            <th>{{acceptedSPs() / plannedSPs() * 100 | number: 2 }} %</th>
-            <th></th>
-            <th>{{plannedSPs() / (teamSize * sprintDuration - ptos) | number: 2 }}</th>
-            <th>{{acceptedSPs() / (teamSize * sprintDuration - ptos) | number: 2 }}</th>
-            <th></th>
-            <th>{{countOfZeroDefectUS() / countOfAcceptedUS() * 100 | number: 2}} %</th>
-            <th>{{countOfZeroDefectUS()}}</th>
-            <th>{{countOfInSprintDefects()}}</th>
-            <th>{{countOfInSprintDefects() / acceptedSPs() * 100 | number: 2}}%</th>
-            <th></th>
-            <th>{{totalHours()}}</th>
-            <th>{{newDevHours()}}</th>
-            <th>{{newDevHours()/totalHours() * 100 | number: 2}}%</th>
-            <th>{{nonRoadmapHours()}}</th>
-            <th>{{nonRoadmapHours()/totalHours()*100 | number: 2}}%</th>
+            <td></td>
+            <td>{{teamSize}}</td>
+            <td>{{sprintDuration}}</td>
+            <td>{{plannedSPs()}}</td>
+            <td>{{acceptedSPs()}}</td>
+            <td>{{countOfAcceptedUS()}}</td>
+            <td>{{acceptedSPs() / plannedSPs() * 100 | number: 2 }}%</td>
+            <td> SP</td>
+            <td>{{plannedSPs() / (teamSize * sprintDuration - ptos) | number: 2 }}</td>
+            <td>{{acceptedSPs() / (teamSize * sprintDuration - ptos) | number: 2 }}</td>
+            <td></td>
+            <td>{{countOfZeroDefectUS() / countOfAcceptedUS() * 100 | number: 2}}%</td>
+            <td>{{countOfZeroDefectUS()}}</td>
+            <td>{{countOfInSprintDefects()}}</td>
+            <td>{{countOfInSprintDefects() / acceptedSPs() * 100 | number: 2}}%</td>
+            <td></td>
+            <td>{{totalHours()}}</td>
+            <td>{{newDevHours()}}</td>
+            <td>{{newDevHours()/totalHours() * 100 | number: 2}}%</td>
+            <td>{{nonRoadmapHours()}}</td>
+            <td>{{nonRoadmapHours()/totalHours()*100 | number: 2}}%</td>
         </tr>
         </tbody>
     </table>
-</div>
+    <hr/>
+    <div class="row">
+        <div class="col-sm-6">
+            <table class="table table-condensed table-bordered col-sm-6" ng-show="issues.userStories">
+                <tbody>
+                <tr>
+                    <th>Team Size
+                    </td>
+                    <td>{{teamSize}}</td>
+                </tr>
+                <tr>
+                    <th>Predictability Index
+                    </td>
+                    <td>{{acceptedSPs() / plannedSPs() * 100 | number: 2 }} %</td>
+                </tr>
+                <tr>
+                    <th>First Time Right
+                    </td>
+                    <td>{{countOfZeroDefectUS() / countOfAcceptedUS() * 100 | number: 2}} %</td>
+                </tr>
+                <tr>
+                    <th>Total Hours
+                    </td>
+                    <td>{{totalHours()}} Hours</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-6">
+            <table class="table table-condensed table-bordered col-sm-6" ng-show="issues.userStories">
+                <tbody>
+                <tr>
+                    <th>Velocity</th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Team Size</th>
+                    <td>{{teamSize}}</td>
+                </tr>
+                <tr>
+                    <th>Sprint Duration</th>
+                    <td>{{sprintDuration}} Days</td>
+                </tr>
+                <tr>
+                    <th>Story Points Planned</th>
+                    <td>{{plannedSPs()}} SP</td>
+                </tr>
+                <tr>
+                    <th>Story Points Accepted</th>
+                    <td>{{acceptedSPs()}} SP</td>
+                </tr>
+                <tr>
+                    <th>Count of Accepted Stories</th>
+                    <td>{{countOfAcceptedUS()}}</td>
+                </tr>
+                <tr>
+                    <th>Predictability Index</th>
+                    <td>{{acceptedSPs() / plannedSPs() * 100 | number: 2 }} %</td>
+                </tr>
+                <tr>
+                    <th>Average Velocity</th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Planned Story Points per Day per Person </th>
+                    <td>{{plannedSPs() / (teamSize * sprintDuration - ptos) | number: 2 }}</td>
+                </tr>
+                <tr>
+                    <th>Finished Story Points per Day per Person</th>
+                    <td>{{acceptedSPs() / (teamSize * sprintDuration - ptos) | number: 2 }}</td>
+                </tr>
+                <tr>
+                    <th>First Time Right</th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>First Time Right</th>
+                    <td>{{countOfZeroDefectUS() / countOfAcceptedUS() * 100 | number: 2}} %</td>
+                </tr>
+                <tr>
+                    <th>Count of zero defect story</th>
+                    <td>{{countOfZeroDefectUS()}}</td>
+                </tr>
+                <tr>
+                    <th>Count of in-sprint Defects</th>
+                    <td>{{countOfInSprintDefects()}}</td>
+                </tr>
+                <tr>
+                    <th>Count of in-sprint defects per SP</th>
+                    <td>{{countOfInSprintDefects() / acceptedSPs() * 100 | number: 2}}%</td>
+                </tr>
+                <tr>
+                    <th>Capacity</th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Total Hours</th>
+                    <td>{{totalHours()}} Hours</td>
+                </tr>
+                <tr>
+                    <th>New Development Effort</th>
+                    <td>{{newDevHours()}} Hours</td>
+                </tr>
+                <tr>
+                    <th>New Development Rate</th>
+                    <td>{{newDevHours()/totalHours() * 100 | number: 2}}%</td>
+                </tr>
+                <tr>
+                    <th>Non-roadmap Effort</th>
+                    <td>{{nonRoadmapHours()}} Hours</td>
+                </tr>
+                <tr>
+                    <th>Non-roadmap Rate</th>
+                    <td>{{nonRoadmapHours()/totalHours()*100 | number: 2}}%</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
