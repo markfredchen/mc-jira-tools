@@ -111,7 +111,7 @@ exports.getSprintReviewData = function (req, res) {
                 var userStoryIDs = [];
                 var rnt = {"userStories": []};
                 issues.forEach(function (issue) {
-                    if (issue.typeName === 'User Story' || issue.typeName === 'Bug') {
+                    if (issue.typeName === 'User Story' || issue.typeName === 'Bug' || issue.typeName === 'Task') {
                         userStoryIDs.push(issue.key);
                         rnt.userStories.push({
                             "userStoryID": issue.key,
