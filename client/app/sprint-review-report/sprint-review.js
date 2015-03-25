@@ -65,7 +65,9 @@ angular.module('mcJiraToolsApp')
         $scope.plannedSPs = function(){
             var plannedSPs = 0;
             angular.forEach($scope.issues.userStories, function (story) {
-                plannedSPs += story.points;
+                if (!story.isAdditionalUS) {
+                    plannedSPs += story.points;
+                }
             });
 
             return plannedSPs;

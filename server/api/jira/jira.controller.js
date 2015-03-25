@@ -38,12 +38,23 @@ exports.getAllIssues = function(req, res) {
             if(response.statusCode === 200) {
                 var issues = JSON.parse(result.data).issuesData.issues;
                 var rnt = {"userStories": []};
+                var tasks = [];
                 issues.forEach(function (issue) {
                     if (issue.typeName === 'User Story' || issue.typeName === 'Bug') {
                         rnt.userStories.push({
                             "userStoryID": issue.key,
                             "summary": issue.summary,
                             "tasks": []
+                        });
+                    } else if (issue.typeName === 'Task') {
+                        tasks.push({
+                            "taskID": issue.key,
+                            "summary": issue.summary,
+                            "taskState": issue.statusName,
+                            "assignee": (issue.assigneeName) ? issue.assigneeName : null,
+                            "remaining": issue.trackingStatistic.statFieldValue.text,
+                            "todo": "",
+                            "type": ""
                         });
                     } else {
                         var task = {
@@ -62,6 +73,13 @@ exports.getAllIssues = function(req, res) {
                         })
                     }
                 });
+                if (tasks.length > 0) {
+                    rnt.userStories.push({
+                        "userStoryID": 'Tasks',
+                        "summary": 'Non User Story Tasks',
+                        "tasks": tasks
+                    });
+                }
 
                 res.json(JSON.stringify(rnt));
             }else if(response.statusCode === 401 || response.statusCode === 400){
@@ -110,6 +128,7 @@ exports.getSprintReviewData = function (req, res) {
                 var issues = JSON.parse(result.data).issuesData.issues;
                 var userStoryIDs = [];
                 var rnt = {"userStories": []};
+                var tasks = {};
                 issues.forEach(function (issue) {
                     if (issue.typeName === 'User Story' || issue.typeName === 'Bug' || issue.typeName === 'Task') {
                         userStoryIDs.push(issue.key);
